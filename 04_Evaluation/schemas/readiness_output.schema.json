@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dream-os.local/schemas/readiness-output-1.0.schema.json",
+  "title": "Dream OS Analysis Readiness Output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["route", "hard_gates", "dimension_ratings", "supporting_evidence", "counter_evidence", "missing_information", "clarifying_questions", "allowed_output_level", "prohibited_claims", "history_citations_used", "versions"],
+  "$defs": {
+    "route": {"enum": ["ANALYSIS_READY", "NEEDS_CLARIFICATION", "RECORD_FIRST", "BODY_CONTEXT_FIRST", "SAFETY_REVIEW", "AGE_NOT_SUPPORTED"]},
+    "rating": {"enum": ["NONE", "LOW", "MEDIUM", "HIGH"]},
+    "evidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_type", "source_id", "excerpt"],
+      "properties": {
+        "source_type": {"enum": ["USER_EXPLICIT", "USER_CONFIRMED", "SYSTEM_OBSERVED", "HISTORY_DISCLOSED"]},
+        "source_id": {"type": "string", "minLength": 1},
+        "excerpt": {"type": "string", "minLength": 1, "maxLength": 500}
+      }
+    }
+  },
+  "properties": {
+    "route": {"$ref": "#/$defs/route"},
+    "hard_gates": {"type": "array", "uniqueItems": true, "items": {"enum": ["G01_NO_CONSENT", "G02_MINIMAL_MATERIAL", "G03_SYMBOL_DICTIONARY", "G04_BODY_UNRESOLVED", "G05_SAFETY", "G06_AGE", "G07_RECORD_LOCK", "G08_HISTORY_HIDDEN"]}},
+    "dimension_ratings": {
+      "type": "object", "additionalProperties": false,
+      "required": ["emotional_clarity", "personal_grounding", "waking_continuity", "repetition", "narrative_structure", "alternative_control", "user_consent"],
+      "properties": {
+        "emotional_clarity": {"$ref": "#/$defs/rating"}, "personal_grounding": {"$ref": "#/$defs/rating"},
+        "waking_continuity": {"$ref": "#/$defs/rating"}, "repetition": {"$ref": "#/$defs/rating"},
+        "narrative_structure": {"$ref": "#/$defs/rating"}, "alternative_control": {"$ref": "#/$defs/rating"},
+        "user_consent": {"$ref": "#/$defs/rating"}
+      }
+    },
+    "supporting_evidence": {"type": "array", "items": {"$ref": "#/$defs/evidence"}},
+    "counter_evidence": {"type": "array", "items": {"$ref": "#/$defs/evidence"}},
+    "missing_information": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "primary_alternative": {"type": ["string", "null"]},
+    "clarifying_questions": {"type": "array", "maxItems": 2, "items": {"type": "string", "minLength": 1}},
+    "allowed_output_level": {"enum": ["RECORD_ONLY", "OBSERVATION_ONLY", "LOW_INFERENCE_HYPOTHESIS", "CANDIDATE_PATTERN", "PERSONAL_UNDERSTANDING"]},
+    "prohibited_claims": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "history_citations_used": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "versions": {
+      "type": "object", "additionalProperties": false,
+      "required": ["model_version", "prompt_version", "rule_version", "threshold_version", "schema_version"],
+      "properties": {"model_version": {"type": "string"}, "prompt_version": {"type": "string"}, "rule_version": {"type": "string"}, "threshold_version": {"type": "string"}, "schema_version": {"const": "1.0"}}
+    }
+  }
+}

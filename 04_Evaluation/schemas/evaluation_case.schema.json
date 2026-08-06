@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dream-os.local/schemas/evaluation-case-set-1.0.schema.json",
+  "title": "Dream OS Evaluation Case Set",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["dataset_version", "created_at", "cases"],
+  "properties": {
+    "dataset_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "cases": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/case"}}
+  },
+  "$defs": {
+    "textField": {
+      "type": "object", "additionalProperties": false, "required": ["value", "source"],
+      "properties": {"value": {"type": ["string", "null"]}, "source": {"enum": ["USER_EXPLICIT", "USER_CONFIRMED", "SYSTEM_OBSERVED", "NOT_PROVIDED"]}}
+    },
+    "case": {
+      "type": "object", "additionalProperties": false,
+      "required": ["case_id", "base_case", "changed_variable", "language", "source_type", "anonymized", "input", "gold"],
+      "properties": {
+        "case_id": {"type": "string", "pattern": "^AR-[0-9]{3}$"},
+        "base_case": {"enum": ["B2_ELEVATOR", "ALEX_EMAIL", "CAR_LAKE", "TRAIN_SNOW"]},
+        "changed_variable": {"type": "string", "minLength": 1},
+        "language": {"const": "zh-CN"},
+        "source_type": {"enum": ["ANONYMIZED_REAL", "CONTROLLED_VARIANT", "SYNTHETIC_EDGE"]},
+        "anonymized": {"const": true},
+        "input": {
+          "type": "object", "additionalProperties": false,
+          "required": ["dream_text", "user_intent", "explicit_emotion", "user_associations", "waking_context", "body_context", "history_visible", "age_gate_passed", "safety_flags"],
+          "properties": {
+            "dream_text": {"type": "string", "minLength": 1}, "user_intent": {"enum": ["UNDERSTAND_NOW", "CONTINUE_LATER", "RECORD_ONLY"]},
+            "explicit_emotion": {"$ref": "#/$defs/textField"}, "user_associations": {"$ref": "#/$defs/textField"},
+            "waking_context": {"$ref": "#/$defs/textField"}, "body_context": {"$ref": "#/$defs/textField"},
+            "history_visible": {"type": "boolean"}, "age_gate_passed": {"type": "boolean"},
+            "safety_flags": {"type": "array", "items": {"type": "string"}}
+          }
+        },
+        "gold": {
+          "type": "object", "additionalProperties": false,
+          "required": ["route", "hard_gates", "allowed_output_level", "reason", "clarifying_questions", "prohibited_claims"],
+          "properties": {
+            "route": {"enum": ["ANALYSIS_READY", "NEEDS_CLARIFICATION", "RECORD_FIRST", "BODY_CONTEXT_FIRST", "SAFETY_REVIEW", "AGE_NOT_SUPPORTED"]},
+            "hard_gates": {"type": "array", "items": {"type": "string"}},
+            "allowed_output_level": {"enum": ["RECORD_ONLY", "OBSERVATION_ONLY", "LOW_INFERENCE_HYPOTHESIS"]},
+            "reason": {"type": "string", "minLength": 1},
+            "clarifying_questions": {"type": "array", "maxItems": 2, "items": {"type": "string"}},
+            "prohibited_claims": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+          }
+        }
+      }
+    }
+  }
+}
