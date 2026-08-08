@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dream OS · iPhone 17 Pro Max 预览</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --phone-width-ratio: 1320 / 2868;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      min-height: 100vh;
+      overflow: auto;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 22% 14%, rgba(255,255,255,.18), transparent 28%),
+        radial-gradient(circle at 82% 80%, rgba(173,145,185,.2), transparent 34%),
+        linear-gradient(145deg, #24232a 0%, #111116 54%, #312631 100%);
+    }
+
+    .preview-stage {
+      display: grid;
+      justify-items: center;
+      gap: 14px;
+    }
+
+    .preview-caption {
+      color: rgba(255,255,255,.74);
+      font-size: 12px;
+      letter-spacing: .02em;
+    }
+
+    .phone-wrap {
+      position: relative;
+      width: 440px;
+      height: 956px;
+    }
+
+    .phone-frame {
+      position: relative;
+      width: 440px;
+      height: 956px;
+      transform: scale(var(--frame-scale, 1));
+      transform-origin: top left;
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,.26);
+      border-radius: 56px;
+      background: linear-gradient(145deg, #6d6e72 0%, #292a2e 16%, #101114 52%, #55565b 100%);
+      box-shadow: 0 34px 70px rgba(0,0,0,.46), inset 0 1px 0 rgba(255,255,255,.34), inset 0 -1px 0 rgba(0,0,0,.75);
+    }
+
+    .phone-frame::before,
+    .phone-frame::after {
+      content: "";
+      position: absolute;
+      left: -3px;
+      width: 3px;
+      border-radius: 2px 0 0 2px;
+      background: linear-gradient(#8a8b8f, #303136);
+      box-shadow: 0 18px 0 #4a4b50, 0 40px 0 #4a4b50;
+    }
+    .phone-frame::before { top: 128px; height: 20px; }
+    .phone-frame::after { top: 176px; height: 30px; }
+
+    .phone-screen {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 47px;
+      background: linear-gradient(155deg, #e9e7ec 0%, #f7f5f4 48%, #efd0d0 100%);
+      isolation: isolate;
+    }
+
+    iframe {
+      display: block;
+      position: absolute;
+      top: 44px;
+      left: 0;
+      width: 100%;
+      /* The app owns the full content area down to the home indicator. The tab bar
+         floats inside that area; the indicator remains a separate native-looking overlay. */
+      height: calc(100% - 44px);
+      border: 0;
+      background: #f5f4f7;
+    }
+
+    .dynamic-island {
+      position: absolute;
+      z-index: 3;
+      top: 17px;
+      left: 50%;
+      width: 108px;
+      height: 31px;
+      transform: translateX(-50%);
+      border-radius: 18px;
+      background: #050506;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 1px 2px rgba(0,0,0,.34);
+      pointer-events: none;
+    }
+
+    .statusbar {
+      position: absolute;
+      z-index: 4;
+      top: 12px;
+      left: 25px;
+      right: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: rgba(30,30,34,.72);
+      font-size: 11px;
+      font-weight: 650;
+      pointer-events: none;
+    }
+
+    .statusbar-icons { letter-spacing: .14em; font-size: 9px; }
+
+    .home-indicator {
+      position: absolute;
+      z-index: 4;
+      left: 50%;
+      bottom: 8px;
+      width: 104px;
+      height: 4px;
+      transform: translateX(-50%);
+      border-radius: 4px;
+      background: rgba(30,30,34,.8);
+      pointer-events: none;
+    }
+
+  </style>
+</head>
+<body>
+  <main class="preview-stage">
+    <div class="preview-caption">Dream OS · Expo Web · iPhone 17 Pro Max</div>
+    <div class="phone-wrap">
+      <div class="phone-frame" aria-label="iPhone 17 Pro Max 预览框">
+      <div class="phone-screen">
+        <iframe src="http://localhost:4174/?preview=iphone17promax" title="Dream OS Expo HTML"></iframe>
+        <div class="dynamic-island" aria-hidden="true"></div>
+        <div class="statusbar" aria-hidden="true"><span>9:41</span><span class="statusbar-icons">●●● 100%</span></div>
+        <div class="home-indicator" aria-hidden="true"></div>
+      </div>
+      </div>
+    </div>
+  </main>
+  <script>
+    (() => {
+      const frameWidth = 440;
+      const frameHeight = 956;
+      const stage = document.querySelector('.preview-stage');
+      const wrap = document.querySelector('.phone-wrap');
+      const frame = document.querySelector('.phone-frame');
+      function fitPhone() {
+        const availableWidth = Math.max(240, window.innerWidth - 48);
+        const availableHeight = Math.max(420, window.innerHeight - 90);
+        const scale = Math.min(1, availableWidth / frameWidth, availableHeight / frameHeight);
+        wrap.style.width = `${frameWidth * scale}px`;
+        wrap.style.height = `${frameHeight * scale}px`;
+        frame.style.setProperty('--frame-scale', scale);
+        stage.style.setProperty('--preview-scale', scale);
+      }
+      window.addEventListener('resize', fitPhone, { passive: true });
+      fitPhone();
+    })();
+  </script>
+</body>
+</html>
