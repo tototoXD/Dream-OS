@@ -2,10 +2,11 @@
 
 ## MVP 产品架构、用户主流程与理解会话状态机
 
-**状态：** Product Draft  
-**版本：** v1.2  
-**更新日期：** 2026-08-03  
-**理论依据：** `Dream_OS_Whitepaper_v0.3`  
+**状态：** MVP Engineering Baseline
+**版本：** v1.2
+**更新日期：** 2026-08-08
+**理论依据：** `Dream_OS_Whitepaper_v0.3`
+**工程冻结说明：** `06_Engineering/mvp/MVP_SCOPE_AND_STATE_MACHINE_v1.0.md`
 
 ---
 

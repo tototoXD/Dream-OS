@@ -1,0 +1,11 @@
+{
+  "name": "dream-os-mvp-core",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check src/domain.js && node --check src/state-machine.js && node --check src/ai-provider.js && node --check src/http-ai-provider.js && node --check src/store.js && node --check src/core.js && node --check server/openai-provider.js && node --check server/zhipu-provider.js && node --check server/index.js",
+    "server": "node server/index.js"
+  }
+}

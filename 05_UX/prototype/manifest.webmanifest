@@ -1,0 +1,14 @@
+{
+  "name": "Dream OS",
+  "short_name": "Dream OS",
+  "lang": "zh-CN",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#faf9f6",
+  "theme_color": "#292824",
+  "description": "记录梦境，并在你的确认下逐步理解它。",
+  "icons": [
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
